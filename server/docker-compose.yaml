@@ -48,11 +48,11 @@ services:
     networks:
       - mem0_network
     healthcheck:
-      test: wget http://localhost:7687 || exit 1
-      interval: 1s
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p mem0graph 'RETURN 1' || exit 1"]
+      interval: 10s
       timeout: 10s
-      retries: 20
-      start_period: 90s
+      retries: 10
+      start_period: 60s
     ports:
       - "8474:7474" # HTTP
       - "8687:7687" # Bolt
@@ -60,7 +60,7 @@ services:
       - neo4j_data:/data
     environment:
       - NEO4J_AUTH=neo4j/mem0graph
-      - NEO4J_PLUGINS=["apoc"]  # Add this line to install APOC
+      - NEO4J_PLUGINS=["apoc"]
       - NEO4J_apoc_export_file_enabled=true
       - NEO4J_apoc_import_file_enabled=true
       - NEO4J_apoc_import_file_use__neo4j__config=true
